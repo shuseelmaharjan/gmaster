@@ -1,0 +1,71 @@
+CREATE TABLE programs (
+    program_id INT PRIMARY KEY AUTO_INCREMENT,
+    program_name VARCHAR(255)
+);
+
+CREATE TABLE roles (
+    role_id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(255)
+);
+
+CREATE TABLE users (
+    user_id INT PRIMARY KEY AUTO_INCREMENT,
+    role_id INT,
+    email VARCHAR(255),
+    password VARCHAR(255),
+    FOREIGN KEY (role_id) REFERENCES roles(role_id)
+);
+
+CREATE TABLE batches (
+    batch_id INT PRIMARY KEY AUTO_INCREMENT,
+    program_id INT,
+    batch_name VARCHAR(255),
+    FOREIGN KEY (program_id) REFERENCES programs(program_id)
+);
+
+CREATE TABLE semesters (
+    semester_id INT PRIMARY KEY AUTO_INCREMENT,
+    semester_name VARCHAR(255)
+);
+
+CREATE TABLE courses (
+    course_id INT PRIMARY KEY AUTO_INCREMENT,
+    program_id INT,
+    semester_id INT,
+    course_name VARCHAR(255),
+    FOREIGN KEY (program_id) REFERENCES programs(program_id),
+    FOREIGN KEY (semester_id) REFERENCES semesters(semester_id)
+);
+
+CREATE TABLE teachers (
+    teacher_id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id INT,
+    course_id INT,
+    teacher_name VARCHAR(255),
+    FOREIGN KEY (user_id) REFERENCES users(user_id),
+    FOREIGN KEY (course_id) REFERENCES courses(course_id)
+);
+
+CREATE TABLE students (
+    student_id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id INT,
+    batch_id INT,
+    student_name VARCHAR(255),
+    FOREIGN KEY (user_id) REFERENCES users(user_id),
+    FOREIGN KEY (batch_id) REFERENCES batches(batch_id)
+);
+
+CREATE TABLE enrollments (
+    enrollment_id INT PRIMARY KEY AUTO_INCREMENT,
+    student_id INT,
+    semester_id INT,
+    FOREIGN KEY (student_id) REFERENCES students(student_id),
+    FOREIGN KEY (semester_id) REFERENCES semesters(semester_id)
+);
+
+CREATE TABLE marks (
+    mark_id INT PRIMARY KEY AUTO_INCREMENT,
+    enrollment_id INT,
+    marks VARCHAR(255),
+    FOREIGN KEY (enrollment_id) REFERENCES enrollments(enrollment_id)
+);
